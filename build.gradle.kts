@@ -11,6 +11,8 @@ repositories {
 }
 
 dependencies {
+    implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.16.1")
+    implementation("io.ktor:ktor-client-okhttp-jvm:2.3.8")
     testImplementation("org.jetbrains.kotlin:kotlin-test")
 }
 
