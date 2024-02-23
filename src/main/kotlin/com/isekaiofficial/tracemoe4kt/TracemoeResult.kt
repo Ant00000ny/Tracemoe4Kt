@@ -16,7 +16,7 @@ package com.isekaiofficial.tracemoe4kt
  *
  *   [ref](https://soruly.github.io/trace.moe-api/#/docs)
  */
-data class TraceMoeResult(
+data class TracemoeResult(
     val anilist: Long,
     val filename: String,
     val episode: Int,

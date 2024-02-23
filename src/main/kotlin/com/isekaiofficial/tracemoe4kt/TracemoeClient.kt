@@ -7,8 +7,8 @@ import io.ktor.client.request.*
 import io.ktor.client.request.forms.*
 import io.ktor.http.*
 
-class TraceMoeClient(private val apiKey: String = "") {
-    suspend fun searchAnime(imgUrl: String): List<TraceMoeResult> {
+class TracemoeClient(private val apiKey: String? = null) {
+    suspend fun searchAnime(imgUrl: String): List<TracemoeResult> {
         val safeUrl = if (!imgUrl.startsWith("http")) {
             "https//$imgUrl"
         } else {
@@ -17,14 +17,14 @@ class TraceMoeClient(private val apiKey: String = "") {
 
         val responseJsonNode = client
             .get(safeUrl) {
-                if (apiKey.isNotEmpty()) header("x-trace-key", apiKey)
+                if (!apiKey.isNullOrEmpty()) header("x-trace-key", apiKey)
             }
             .body<String>()
             .let { objectMapper.readTree(it) }
         return responseJsonToList(responseJsonNode)
     }
 
-    suspend fun searchAnime(imgBytes: ByteArray): List<TraceMoeResult> {
+    suspend fun searchAnime(imgBytes: ByteArray): List<TracemoeResult> {
         val responseJsonNode = client
             .submitFormWithBinaryData(
                 url = "https://api.trace.moe/search",
@@ -32,7 +32,7 @@ class TraceMoeClient(private val apiKey: String = "") {
                     append(
                         "image", imgBytes,
                         Headers.build {
-                            if (apiKey.isNotEmpty()) append("x-trace-key", apiKey)
+                            if (!apiKey.isNullOrEmpty()) append("x-trace-key", apiKey)
                             append(HttpHeaders.ContentType, ContentType.Image.Any)
                             append(HttpHeaders.ContentDisposition, "filename=image.png")
                         }
@@ -45,8 +45,8 @@ class TraceMoeClient(private val apiKey: String = "") {
         return responseJsonToList(responseJsonNode)
     }
 
-    private fun responseJsonToList(jsonNode: JsonNode): List<TraceMoeResult> {
+    private fun responseJsonToList(jsonNode: JsonNode): List<TracemoeResult> {
         return jsonNode.at("/result")
-            .map { objectMapper.convertValue<TraceMoeResult>(it) }
+            .map { objectMapper.convertValue<TracemoeResult>(it) }
     }
 }
