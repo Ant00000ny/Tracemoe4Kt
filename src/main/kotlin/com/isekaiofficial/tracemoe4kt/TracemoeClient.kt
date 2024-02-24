@@ -1,31 +1,30 @@
 package com.isekaiofficial.tracemoe4kt
 
-import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.module.kotlin.convertValue
+import com.isekaiofficial.tracemoe4kt.entity.TracemoeResponse
 import io.ktor.client.call.*
 import io.ktor.client.request.*
 import io.ktor.client.request.forms.*
 import io.ktor.http.*
 
 class TracemoeClient(private val apiKey: String? = null) {
-    suspend fun searchAnime(imgUrl: String): List<TracemoeResult> {
-        val safeUrl = if (!imgUrl.startsWith("http")) {
-            "https//$imgUrl"
-        } else {
-            imgUrl
-        }
-
-        val responseJsonNode = client
-            .get(safeUrl) {
+    suspend fun searchAnime(imgUrl: String): TracemoeResponse {
+        val responseJson = client
+            .get {
+                url {
+                    takeFrom(imgUrl)
+                    parameters {
+                        append("cutBorders", "")
+                    }
+                }
                 if (!apiKey.isNullOrEmpty()) header("x-trace-key", apiKey)
             }
             .body<String>()
-            .let { objectMapper.readTree(it) }
-        return responseJsonToList(responseJsonNode)
+        return objectMapper.convertValue<TracemoeResponse>(responseJson)
     }
 
-    suspend fun searchAnime(imgBytes: ByteArray): List<TracemoeResult> {
-        val responseJsonNode = client
+    suspend fun searchAnime(imgBytes: ByteArray): TracemoeResponse {
+        val responseJson = client
             .submitFormWithBinaryData(
                 url = "https://api.trace.moe/search",
                 formData = formData {
@@ -40,13 +39,7 @@ class TracemoeClient(private val apiKey: String? = null) {
                 }
             )
             .body<String>()
-            .let { objectMapper.readTree(it) }
 
-        return responseJsonToList(responseJsonNode)
-    }
-
-    private fun responseJsonToList(jsonNode: JsonNode): List<TracemoeResult> {
-        return jsonNode.at("/result")
-            .map { objectMapper.convertValue<TracemoeResult>(it) }
+        return objectMapper.convertValue<TracemoeResponse>(responseJson)
     }
 }

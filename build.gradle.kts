@@ -12,7 +12,8 @@ repositories {
 
 dependencies {
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.16.1")
-    implementation("io.ktor:ktor-client-okhttp-jvm:2.3.8")
+    implementation("io.ktor:ktor-client-cio:3.0.0-beta-1")
+    implementation("io.ktor:ktor-client-cio-jvm:3.0.0-beta-1")
     testImplementation("org.jetbrains.kotlin:kotlin-test")
 }
 
@@ -33,4 +34,9 @@ publishing {
     repositories {
         mavenLocal()
     }
+}
+
+java {
+    withJavadocJar()
+    withSourcesJar()
 }
