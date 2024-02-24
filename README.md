@@ -21,4 +21,4 @@ val results = tracemoeClient.searchAnime(url)
 val results = tracemoeClient.searchAnime(bytes)
 ```
 
-The return value above is a list of `TracemoeResult`.
+The return value above is a list of `TracemoeResponse`.
