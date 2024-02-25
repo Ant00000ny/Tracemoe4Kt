@@ -20,5 +20,6 @@ val results = tracemoeClient.searchAnime(url)
 // or search by upload image bytes
 val results = tracemoeClient.searchAnime(bytes)
 ```
+See [Test.kt](src%2Ftest%2Fkotlin%2FTest.kt) for more example.
 
 The return value above is a list of `TracemoeResponse`.
