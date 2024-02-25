@@ -3,7 +3,7 @@ package com.isekaiofficial.tracemoe4kt.entity
 data class TracemoeResult(
     val anilist: Long,
     val filename: String,
-    val episode: String?,
+    val episode: String,
     val from: Double,
     val to: Double,
     val similarity: Double,
