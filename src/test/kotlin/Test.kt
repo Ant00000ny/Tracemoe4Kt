@@ -34,4 +34,10 @@ class Test {
         val searchResult = tracemoeClient.searchAnime(imgBytes = image)
         println(searchResult)
     }
+
+    @Test
+    fun testGetMe() = runBlocking {
+        val me = tracemoeClient.getMe()
+        println(me)
+    }
 }

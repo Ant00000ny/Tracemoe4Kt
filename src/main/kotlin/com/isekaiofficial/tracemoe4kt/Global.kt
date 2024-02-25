@@ -9,3 +9,5 @@ internal val client = HttpClient(CIO) {
 }
 
 internal val objectMapper = jacksonObjectMapper()
+
+internal const val TRACEMOE_API = "https://api.trace.moe"
